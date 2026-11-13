@@ -10,3 +10,10 @@ Debug/
 Release/
 Build/
 doomgeneric.map
+
+# S40 generated output
+**/build/
+**/dist/
+**/__pycache__/
+*.pyc
+.DS_Store

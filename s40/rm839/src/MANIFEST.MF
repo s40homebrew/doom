@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+MIDlet-Name: Doom
+MIDlet-Version: 0.1.0
+MIDlet-Vendor: Homebrew
+MIDlet-1: Doom,,DoomLauncher
+MicroEdition-Configuration: CLDC-1.1
+MicroEdition-Profile: MIDP-2.1
+

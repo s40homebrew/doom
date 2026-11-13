@@ -1775,6 +1775,7 @@ static void LoadDefaultCollection(default_collection_t *collection)
     default_t *def;
     char defname[80];
     char strparm[100];
+    char line[256];
 
     // read the file in, overriding any set defaults
     f = fopen(collection->filename, "r");
@@ -1787,9 +1788,11 @@ static void LoadDefaultCollection(default_collection_t *collection)
         return;
     }
 
-    while (!feof(f))
+    // S40 provides fgets and ROM sscanf, but no fscanf for its custom FILE.
+    // This loader remains disabled unless ORIGCODE is enabled above.
+    while (fgets(line, sizeof(line), f) != NULL)
     {
-        if (fscanf(f, "%79s %99[^\n]\n", defname, strparm) != 2)
+        if (sscanf(line, "%79s %99[^\n]", defname, strparm) != 2)
         {
             // This line doesn't match
 

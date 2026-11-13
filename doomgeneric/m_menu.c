@@ -640,7 +640,16 @@ void M_SaveSelect(int choice)
     saveSlot = choice;
     M_StringCopy(saveOldString,savegamestrings[choice], SAVESTRINGSIZE);
     if (!strcmp(savegamestrings[choice], EMPTYSTRING))
-	savegamestrings[choice][0] = 0;
+    {
+#ifdef DOOMGENERIC_S40
+        // The phone keypad has no text-entry backend. Supply a name so
+        // Select can confirm an empty slot; keep existing save names intact.
+        snprintf(savegamestrings[choice], SAVESTRINGSIZE,
+                 "S40 SAVE %d", choice + 1);
+#else
+        savegamestrings[choice][0] = 0;
+#endif
+    }
     saveCharIndex = strlen(savegamestrings[choice]);
 }
 

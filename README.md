@@ -1,67 +1,53 @@
-# doomgeneric
-The purpose of doomgeneric is to make porting Doom easier.
-Of course Doom is already portable but with doomgeneric it is possible with just a few functions.
+# Doom on Nokia Series 40
 
-To try it you will need a WAD file (game data). If you don't own the game, shareware version is freely available (doom1.wad).
+DoomGeneric running as native ARM code from a Java ME launcher. Sound is disabled.
 
-# porting
-Create a file named doomgeneric_yourplatform.c and just implement these functions to suit your platform.
-* DG_Init
-* DG_DrawFrame
-* DG_SleepMs
-* DG_GetTicksMs
-* DG_GetKey
+## Build
 
-|Functions            |Description|
-|---------------------|-----------|
-|DG_Init              |Initialize your platfrom (create window, framebuffer, etc...).
-|DG_DrawFrame         |Frame is ready in DG_ScreenBuffer. Copy it to your platform's screen.
-|DG_SleepMs           |Sleep in milliseconds.
-|DG_GetTicksMs        |The ticks passed since launch in milliseconds.
-|DG_GetKey            |Provide keyboard events.
-|DG_SetWindowTitle    |Not required. This is for setting the window title as Doom sets this from WAD file.
+Clone the [S40 homebrew SDK](https://github.com/s40homebrew/s40) into `main/`
+beside this fork's `doom/` directory:
 
-### main loop
-At start, call doomgeneric_Create().
-
-In a loop, call doomgeneric_Tick().
-
-In simplest form:
-```
-int main(int argc, char **argv)
-{
-    doomgeneric_Create(argc, argv);
-
-    while (1)
-    {
-        doomgeneric_Tick();
-    }
-    
-    return 0;
-}
+```sh
+git clone https://github.com/s40homebrew/s40.git main
+git clone --branch s40 https://github.com/s40homebrew/doom.git doom
+cd doom
 ```
 
-# sound
-Sound is much harder to implement! If you need sound, take a look at SDL port. It fully supports sound and music! Where to start? Define FEATURE_SOUND, assign DG_sound_module and DG_music_module.
+Follow the SDK's [dependency setup](https://github.com/s40homebrew/s40/blob/main/docs/building.md)
+from `main/`, then run the build from `doom/`:
 
-# platforms
-Ported platforms include Windows, X11, SDL, emscripten. Just look at (doomgeneric_win.c, doomgeneric_xlib.c, doomgeneric_sdl.c).
-Makefiles provided for each platform.
+```sh
+bash s40/build.sh shared
+```
 
-## emscripten
-You can try it directly here:
-https://ozkl.github.io/doomgeneric/
+The build finds the sibling `main/` checkout automatically. Set `S40_SDK_ROOT`
+to the SDK repository's absolute path if it is checked out elsewhere.
 
-emscripten port is based on SDL port, so it supports sound and music! For music, timidity backend is used.
+| Target | Phones | Output directory |
+| --- | --- | --- |
+| `shared` (default) | 6303 classic / C3-00 | `s40/shared/dist/` |
+| `rm839` | Nokia 301, RM-839 firmware 02.33 | `s40/rm839/dist/` |
+| `rm443` | 6303 classic, firmware 10.12 | `s40/rm443/dist/` |
 
-## Windows
-![Windows](screenshots/windows.png)
+Replace `shared` with the target you want. Each produces a `.jar` and matching
+`.jad`. The shared target discovers firmware services; the other two use fixed addresses.
 
-## X11 - Ubuntu
-![Ubuntu](screenshots/ubuntu.png)
+## Play
 
-## X11 - FreeBSD
-![FreeBSD](screenshots/freebsd.png)
+Put an IWAD at `D:\doom\doom1.wad`, install the JAR/JAD and choose **Start Doom**.
+The shared target has a **Check firmware** step first. Other accepted names are
+`doom.wad`, `doom2.wad`, `freedoom1.wad` and `freedoom2.wad`. Fallback folders:
+`C:\predefgallery\doom\`, `C:\doom\` and `E:\doom\`.
+Saves and `doom.log` go beside the IWAD.
 
-## SDL
-![SDL](screenshots/sdl.png)
+D-pad or 2/4/6/8 moves; 5 fires; 0 uses doors; 1/3 strafes; 7 runs; 9 opens the
+map; # changes weapons; * or the right softkey opens the menu.
+[C3 keyboard controls](s40/shared/README.md).
+
+## Source and licenses
+
+Based on [DoomGeneric](https://github.com/ozkl/doomgeneric); engine source is in
+`doomgeneric/`, S40 launchers and adapters in `s40/`.
+Doom and its derived backends are [GPL-2.0-or-later](LICENSE). The independent
+shared launcher, input mapper and build configuration are [MIT](s40/LICENSE).
+Library notices are in the SDK and `s40/rm839/licenses/`.

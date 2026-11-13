@@ -1,0 +1,20 @@
+Doom example for S40 Homebrew
+
+DoomGeneric engine: https://github.com/ozkl/doomgeneric
+Base checkout: e257a09527062bfb986b6e5e0780839b6cbd5b71
+
+The engine and native/doom_s40.c backend are GPL-2.0-or-later; see COPYING.DOOM.
+The backend implements DoomGeneric's platform interface and includes the Doom
+low-memory compatibility data from the engine's i_system.c. The engine's original
+copyright and license notices remain in its source checkout. Local engine
+modifications remain covered by its license.
+
+The independently written launcher, input mapper and build configuration in
+this example are MIT, as is the shared S40 Homebrew foundation; see COPYING.MIT
+in the JAR or s40/LICENSE in the source tree. The combined Doom executable
+is distributed under GPL-2.0-or-later, with the MIT and third-party notices
+retained for their respective components.
+
+The engine source is in this fork's doomgeneric/ directory.
+No Doom IWAD is bundled. Original game data is installed separately and is
+not covered by the engine's source license.

@@ -51,7 +51,9 @@ int  I_GetTime (void)
 
     ticks -= basetime;
 
-    return (ticks * TICRATE) / 1000;
+    // Split milliseconds before multiplying: ticks * TICRATE overflows
+    // uint32_t after about 34 hours, well before the millisecond clock wraps.
+    return (ticks / 1000) * TICRATE + ((ticks % 1000) * TICRATE) / 1000;
 }
 
 

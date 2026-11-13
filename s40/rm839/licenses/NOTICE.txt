@@ -1,0 +1,25 @@
+Native Doom for Nokia 301 RM-839 02.33
+
+DoomGeneric engine: https://github.com/ozkl/doomgeneric
+Base checkout: e257a09527062bfb986b6e5e0780839b6cbd5b71
+Engine and platform adapter: GPL-2.0-or-later, see COPYING.DOOM.
+S40 adaptations are in doomgeneric/ at the fork root and this port's sources.
+
+This build links newlib/libm and libgcc from Arm GNU Toolchain 15.3.rel2,
+arm-none-eabi, using its generic soft-float libraries. Newlib copyright and
+permission notices are reproduced in COPYING.NEWLIB. GCC's runtime exception
+and GPLv3 text are reproduced in COPYING.RUNTIME and COPYING.GCC3.
+
+Runtime/source locations:
+https://developer.arm.com/Tools%20and%20Software/GNU%20Toolchain
+https://sourceware.org/newlib/
+https://gcc.gnu.org/
+
+Notice texts retrieved from the source mirrors:
+https://github.com/mirror/newlib-cygwin/blob/master/COPYING.NEWLIB
+https://github.com/gcc-mirror/gcc/blob/releases/gcc-15/COPYING.RUNTIME
+https://github.com/gcc-mirror/gcc/blob/releases/gcc-15/COPYING3
+
+No complete firmware image or Doom IWAD are bundled in this JAR. Function pointers
+bind to the phone's own exact RM-839 02.33 firmware. The WAD is installed
+separately; original game data is not covered by the engine's source license.
