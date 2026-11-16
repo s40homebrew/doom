@@ -51,6 +51,10 @@ printf 'Building bootstrap loader and CLDC launcher...\n'
 "$JAVA8_HOME/bin/java" -cp "$LEGACY_JAVAC" j2me.thirdparty.legacyjavac.Main -source 1.3 -target 1.1 -g:none -bootclasspath "$SDK_CLASSES" -d "$B/classes" "$P/src/DoomLauncher.java"
 python3 "$R/homebrew/tools/preverify.py" "$JAVA8_HOME/bin/java" "$PROGUARD_JAR" "$SDK_CLASSES" "$B/classes" "$B/preverified"
 "$JAVA8_HOME/bin/javap" -classpath "$B/preverified" -c -p -v DoomLauncher > "$B/DoomLauncher.javap.txt"
+# Exercise the compiled selector without instantiating a MIDlet or running ARM code.
+mkdir -p "$B/host-check"
+"$JAVA8_HOME/bin/javac" -d "$B/host-check" "$P/scripts/CheckStagePlacement.java"
+"$JAVA8_HOME/bin/java" -cp "$B/host-check:$B/preverified:$SDK_CLASSES" CheckStagePlacement "$B/native.bin"
 cp "$B/stage.bin" "$B/native.bin" "$B/doom.bin" "$B/preverified/"
 python3 - "$P" <<'PY'
 from pathlib import Path
