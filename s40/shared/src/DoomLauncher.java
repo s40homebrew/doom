@@ -8,6 +8,15 @@ public final class DoomLauncher extends HomebrewMIDlet {
         return "Start Doom";
     }
 
+    protected String nativeResource() {
+        // Older S40 VMs may inflate an entire resource into the Java heap.
+        return "/application.bin.parts";
+    }
+
+    protected boolean launchDiagnostics() {
+        return true;
+    }
+
     protected String[] instructions(int inputLayout) {
         if (inputLayout == FirmwareApi.INPUT_QWERTY)
             return new String[] {"DOOM / C3 QWERTY or QWERTZ", "IWAD: D:/doom/doom1.wad",

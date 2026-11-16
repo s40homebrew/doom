@@ -46,6 +46,8 @@ void DG_SleepMs(uint32_t ms) { s40_sleep_ms(ms); }
 void DG_SetWindowTitle(const char* s) { printf("TITLE: %s\n", s); }
 void DG_Init(void) {
     s40_result[4] = 3;
+    if (!DG_ScreenBuffer)
+        I_Error("Cannot allocate Doom render buffer");
     pixels = s40_display_open();
     display_width = s40_display_width();
     display_height = s40_display_height();
@@ -62,6 +64,7 @@ void DG_Init(void) {
     for (unsigned i = 0; i < display_width * display_height; i++)
         pixels[i] = 0xFF102030u;
     s40_display_present();
+    printf("Doom display initialized: %ux%u\n", display_width, display_height);
 }
 void DG_DrawFrame(void) {
     if (!pixels)
@@ -74,8 +77,12 @@ void DG_DrawFrame(void) {
         for (unsigned x = 0; x < draw_width; x++)
             dst[x] = src[sample_columns[x]] | 0xFF000000u;
     }
+    if (!frames)
+        puts("Doom frame 1 ready for display");
     s40_display_present();
     ++frames;
+    if (frames == 1 || frames == 35)
+        printf("Doom frame %u refresh returned\n", frames);
     s40_result[5] = frames;
     s40_result[4] = 6;
     s40_pump();
@@ -147,11 +154,20 @@ int s40_app_main(void) {
     if (!wad)
         I_Error("No IWAD. Put doom1.wad in D:\\doom\\ or C:\\predefgallery\\doom\\");
     s40_set_log(fopen("doom.log", "wb"));
-    printf("Adaptive native Doom; %s%s\n", s40_get_root(), wad);
+    printf("Adaptive native Doom " S40_DOOM_VERSION "; %s%s\n", s40_get_root(), wad);
+    // Successful bootstrap already requires privileged CP15 cache access.
+    // Record the actual core ID/revision; MIDR does not encode clock speed.
+    uint32_t midr;
+    __asm__ volatile("mrc p15, 0, %0, c0, c0, 0" : "=r"(midr));
+    printf("CPU MIDR %08x\n", midr);
     s40_result[4] = 4;
-    char* argv[] = {"doomgeneric", "-iwad",       (char*)wad,     "-nosound", "-nogui",
-                    "-config",     "default.cfg", "-extraconfig", "doom.cfg"};
+    /* Exit callbacks still inspect myargv after s40_finish longjmps out of
+     * this function. Keep the pointer array alive until session cleanup. */
+    static char* argv[] = {"doomgeneric", "-iwad",       NULL,           "-nosound", "-nogui",
+                           "-config",     "default.cfg", "-extraconfig", "doom.cfg"};
+    argv[2] = (char*)wad;
     doomgeneric_Create(sizeof(argv) / sizeof(*argv), argv);
+    puts("Doom initialization complete");
     key_menu_confirm = KEY_ENTER;
     key_menu_abort = KEY_ESCAPE;
     key_nextweapon = S40_NEXT_WEAPON_KEY;

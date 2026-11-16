@@ -25,12 +25,17 @@ to the SDK repository's absolute path if it is checked out elsewhere.
 
 | Target | Phones | Output directory |
 | --- | --- | --- |
-| `shared` (default) | 6303 classic / C3-00 | `s40/shared/dist/` |
+| `shared` (default) | 6300 / 6303 classic / C3-00 | `s40/shared/dist/` |
 | `rm839` | Nokia 301, RM-839 firmware 02.33 | `s40/rm839/dist/` |
 | `rm443` | 6303 classic, firmware 10.12 | `s40/rm443/dist/` |
 
 Replace `shared` with the target you want. Each produces a `.jar` and matching
 `.jad`. The shared target discovers firmware services; the other two use fixed addresses.
+The shared package is `Doom-0.6.1.jar`. See the
+[shared target guide](s40/shared/README.md) for controls and setup.
+
+See the [RM-443](s40/rm443/README.md) and [RM-839](s40/rm839/README.md)
+guides for fixed-target setup and ABI details.
 
 ## Play
 
