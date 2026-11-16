@@ -11,7 +11,7 @@ UPSTREAM="$P/../../doomgeneric"
 for t in "$ARM_GCC" "$CC" "$LD" "$LLVM/llvm-objcopy" "$JAVA8_HOME/bin/java"; do
     test -x "$t" || { printf 'Missing tool: %s\n' "$t"; exit 1; }
 done
-python3 "$R/scripts/clean_build_outputs.py" java "$P" "$B" build "$P"
+python3 "$R/tools/clean_build_outputs.py" java "$P" "$B" build "$P"
 mkdir -p "$B/obj" "$B/classes" "$B/preverified" "$P/dist"
 # Compile the included engine source, including the S40 adaptations.
 python3 "$P/scripts/gen_imports.py"
