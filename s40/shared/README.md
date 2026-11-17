@@ -1,7 +1,7 @@
 # Shared Doom target
 
 One JAR for Nokia 6300, 6303 classic and C3-00. Build from the repository root
-with `bash s40/build.sh shared`; install `s40/shared/dist/Doom-0.6.1.jar` and
+with `bash s40/build.sh shared`; install `s40/shared/dist/Doom-0.6.2.jar` and
 its matching JAD. Requires MIDP 2.0 / CLDC 1.1.
 
 ## Play
